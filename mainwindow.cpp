@@ -15,6 +15,8 @@
 #include <QPropertyAnimation>
 #include <QTime>
 #include <QTimer>
+#include <QLineEdit>
+#include <typeinfo>
 using namespace std;
 using namespace cv;
 QString filename;
@@ -69,12 +71,17 @@ void delay( int millisecondsToWait )
 }
 void MainWindow::on_pushButton_2_clicked()
 {
-//    delay(1000);
-    float rate = 0.8;
+    QString QnumberFrame = ui->numberFrame->text();
+    int numberFrame = QnumberFrame.toInt();
+    cout << typeid(numberFrame).name() << endl;
+    QString QSeconds = ui->seconds->text() ;
+    float Seconds = QSeconds.toFloat();
+    float rate = 0.9;
     String image = filename.toUtf8().constData();
-    for (int i = 0; i < 50; i++)
+    cout << Seconds/numberFrame << endl;
+    for (int i = 0; i < numberFrame; i++)
     {
-        rate = rate - 0.016;
+        rate = rate - 0.9/numberFrame;
         Mat mat = imread(image);
         int width = mat.size().width;
         int height = mat.size().height;
@@ -89,8 +96,8 @@ void MainWindow::on_pushButton_2_clicked()
         cvtColor(mat, mat, CV_BGR2RGB);
         ui->gif->setPixmap(QPixmap::fromImage(QImage(mat.data, mat.cols, mat.rows, mat.step, QImage::Format_RGB888)));
         ui->gif->setScaledContents(true);
-        cout << rate << endl;
-        delay(40);
+        //cout << rate << endl;
+        delay(Seconds*1000/numberFrame);
     }
 //    Mat mat = imread(image);
 //    int width = mat.size().width;
